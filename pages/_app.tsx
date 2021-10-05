@@ -1,7 +1,15 @@
-import "tailwindcss/tailwind.css";
-import type { AppProps } from "next/app";
+import "../css/index.css";
+import Head from "next/head";
+import Layout from "../components/layout";
+import "../fontAwesome.ts";
+import { AppProps } from "next/dist/shared/lib/router/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }
+
 export default MyApp;

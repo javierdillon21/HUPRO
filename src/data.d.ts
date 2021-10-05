@@ -4,6 +4,6 @@ interface Usuario {
     apellido: string
     correo: string
     cedula: string
-    username: string
+    username?: string
     password: string
 }
