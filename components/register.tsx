@@ -17,12 +17,16 @@ export default function Registrar() {
     control: controlUsuario,
   } = useForm<Usuario>();
 
+  function Submit(user: Usuario) {
+    route.push(`/platform/${user.cedula}-${user.nombre}-${user.apellido}`);
+  }
+
   return (
     <>
       <Header canUback={true} routeBack={"/"} tabTitle={"Nueva cuenta"} />
       <div className="flex flex-col gap-y-10 items-center mt-16">
         <form
-          onSubmit={handleSubmitUsuario(() => route.push("/test"))}
+          onSubmit={handleSubmitUsuario(Submit)}
           className="flex flex-col xs:w-11/12 md:w-2/3 gap-y-2 m-0"
         >
           <span className="text-3xl font-extrabold mb-4">Datos Personales</span>
@@ -63,7 +67,7 @@ export default function Registrar() {
             <span className="text-red-500 text-sm">Campo obligatorio</span>
           )}
           <input
-            type="text"
+            type="password"
             {...registerUsuario("password", { required: true })}
             placeholder="Contraseña"
             className="form-input border-0 border-b placeholder-gray-400 border-gray-400"

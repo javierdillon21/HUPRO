@@ -38,7 +38,7 @@ export default function Welcome() {
           <span className="text-red-500 text-sm">Campo obligatorio</span>
         )}
         <input
-          type="text"
+          type="password"
           {...registerUsuario("password", { required: true })}
           placeholder="Contraseña"
           className="form-input border-0 border-b placeholder-gray-400 border-gray-400"
