@@ -18,7 +18,7 @@ export default function Registrar() {
   } = useForm<Usuario>();
 
   function Submit(user: Usuario) {
-    route.push(`/platform/${user.cedula}-${user.nombre}-${user.apellido}`);
+    route.push(`/platform/${user.cedula}:${user.nombre}:${user.apellido}`);
   }
 
   return (

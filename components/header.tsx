@@ -11,7 +11,7 @@ export default function Header(props: {
   userName?: string;
 }) {
   return (
-    <div className="flex w-screen h-14 px-4 gap-x-6 items-center shadow-md">
+    <div className="flex w-screen h-14 px-4 gap-x-6 items-center border-b">
       {props.canUback && (
         <Link href={props.routeBack as string}>
           <a>

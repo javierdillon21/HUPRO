@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Home() {
   const [miniaturas, setMiniaturas] = useState<Miniatura[]>();
   const [filtro, setFiltro] = useState<Miniatura[]>();
+  const [filtrar, setFiltrar] = useState(false);
   const categorias = ["General", "Dormitorio", "Sala", "Comedor", "Fachada"];
   const info = useRouter().query.pid as string;
   console.log(info);
@@ -52,44 +53,75 @@ export default function Home() {
         <Header
           canUback={false}
           tabTitle="De tu interés"
-          userName={`${info.split("-")[1][0]}${info.split("-")[2][0]}`}
+          userName={`${info.split(":")[1][0]}${info.split(":")[2][0]}`}
         />
-        <div className="flex flex-col w-screen items-center justify-center gap-6">
-          <div
-            id="Barra de categorias"
-            className="flex flex-wrap px-8 py-0.5 justify-around bg-gray-100 bg-opacity-70 w-90p gap-x-8 text-sm"
-          >
-            <button
-              className="p-0.5 focus:font-bold focus:border-b focus:border-gray-500 focus:outline-none"
-              onClick={() => setFiltro(miniaturas)}
-              autoFocus
-            >
-              Todos
-            </button>
-            {categorias.map((categoria) => {
-              return (
+        <div className="flex flex-col w-screen items-center justify-center ">
+          {filtrar && (
+            <>
+              <div
+                id="Barra de categorias"
+                className="flex flex-wrap px-8 py-0.5 justify-around bg-gray-100 bg-opacity-70 w-90p gap-x-8 text-sm"
+              >
                 <button
                   className="p-0.5 focus:font-bold focus:border-b focus:border-gray-500 focus:outline-none"
-                  onClick={() =>
-                    setFiltro(
-                      miniaturas?.filter(
-                        (miniatura) => miniatura.categoria == categoria
-                      )
-                    )
-                  }
+                  onClick={() => setFiltro(miniaturas)}
+                  autoFocus
                 >
-                  {categoria}
+                  Todos
                 </button>
-              );
-            })}
-          </div>
+                {categorias.map((categoria) => {
+                  return (
+                    <button
+                      key={`id-${categoria}`}
+                      className="p-0.5 focus:font-bold focus:border-b focus:border-gray-500 focus:outline-none"
+                      onClick={() =>
+                        setFiltro(
+                          miniaturas?.filter(
+                            (miniatura) => miniatura.categoria == categoria
+                          )
+                        )
+                      }
+                    >
+                      {categoria}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
+          <div className="flex flex-row w-full justify-between items-center px-2 py-1 mb-2 shadow-md">
+            <span className="flex gap-2 items-center text-sm">
+              Ordenar por
+              <FontAwesomeIcon
+                icon="sort-down"
+                size="1x"
+                className="fill-current text-gray-700"
+              />
+            </span>
+            <div className="flex gap-2 items-center self-end ">
+              {filtrar && (
+                <FontAwesomeIcon
+                  icon="arrow-up"
+                  size="1x"
+                  className="fill-current text-gray-700"
+                  onClick={() => setFiltrar(false)}
+                />
+              )}
+              <a
+                className="text-blue-700 font-medium"
+                onClick={() => setFiltrar(true)}
+              >
+                FILTRAR
+              </a>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2 gap-y-6">
             {filtro?.map((p) => {
               return (
-                <div className="flex justify-center">
+                <div key={`pid-${p.nombre}`} className="flex justify-center">
                   <div className="grid font-title text-sm gap-y-2 text-third shadow-md w-98">
-                    <Link href={`/${p.portada.idProyecto}`}>
+                    <Link href={`./proyecto/${info}:${p.portada.idProyecto}`}>
                       <a className="flex w-full h-44">
                         <Image
                           className="object-cover object-top transition duration-500 ease-in-out transform hover:scale-110"
@@ -132,9 +164,9 @@ export default function Home() {
                           </span>
                           <span className="flex text-md px-1 flex-col items-center justify-center leading-4">
                             {p.area}
-                            <a className="text-sm font-medium">
+                            <span className="text-sm font-medium">
                               <a>Ext. </a>m<sup>2</sup>
-                            </a>
+                            </span>
                           </span>
                         </span>
                       </span>

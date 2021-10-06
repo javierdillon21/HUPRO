@@ -25,6 +25,7 @@ interface Encabezado{
     area: string
     dormitorios: number
     banos: number
+    
 
 
 }
@@ -38,6 +39,9 @@ interface Miniatura{
     area: string
     dormitorios: number
     banos: number
+    precio_por_metro?: string
+    descripcion?: string
+    multimedia?: Imagen[]
 }
 
 //Utilities of MOSAICO-DOCUMENTS
