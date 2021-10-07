@@ -9,7 +9,7 @@ export default function Test() {
   const route = useRouter();
   console.log(route);
 
-  const [numberForm, setNumberForm] = useState<1 | 2 | 3 | 4>(1);
+  const [numberForm, setNumberForm] = useState<1 | 2 | 3 | 4 | 5>(1);
   return (
     <div className="flex flex-col h-screen items-center justify-center">
       <form className="flex flex-col justify-center gap-2 w-2/3">
@@ -115,17 +115,25 @@ export default function Test() {
             </span>
             <span className="flex flex-col h-20 rounded-md shadow-md items-start justify-center px-2 text-sm ">
               <p>Desde:</p>
-              <input
-                type="number"
-                className="input-input flex w-full border-gray-400 border-0 border-b"
-              ></input>
+              <a className="flex items-center text-lg font-medium text-gray-700">
+                $
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  className="input-input flex w-full border-gray-400 border-0 border-b"
+                ></input>
+              </a>
             </span>
             <span className="flex flex-col h-20 rounded-md shadow-md items-start justify-center px-2 text-sm ">
               <p>Hasta:</p>
-              <input
-                type="number"
-                className="input-input flex w-full border-gray-400 border-0 border-b"
-              ></input>
+              <a className="flex items-center text-lg font-medium text-gray-700">
+                $
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  className="input-input flex w-full border-gray-400 border-0 border-b"
+                ></input>
+              </a>
             </span>
 
             <span
@@ -188,10 +196,68 @@ export default function Test() {
                 5
               </label>
             </div>
+            <a
+              onClick={() => setNumberForm(5)}
+              className="mt-8 text-md font-medium text-right text-blue-600"
+            >
+              Siguiente
+            </a>
+          </>
+        )}
+        {/* FORMULARIO 5 */}
+        {numberForm == 5 && (
+          <>
+            <span className="text-2xl text-center leading-6 font-extrabold mb-3">
+              Elija las opciones acorde a sus preferencias
+            </span>
+            <span className="text-md text-center font-normal mt-1 mb-2 ">
+              Sector
+            </span>
+            <label className="flex h-10 rounded-md shadow-md items-center px-2 gap-3 text-sm ">
+              <input
+                type="checkbox"
+                className="form-checkbox appearance-none checked:bg-blue-600 checked:border-transparent"
+              ></input>
+              Norte
+            </label>
+
+            <label className="flex h-10 rounded-md shadow-md items-center px-2 gap-3 text-sm ">
+              <input
+                type="checkbox"
+                className="form-checkbox appearance-none checked:bg-blue-600 checked:border-transparent"
+              ></input>
+              Sur
+            </label>
+
+            <label className="flex h-10 rounded-md shadow-md items-center px-2 gap-3 text-sm">
+              <input
+                type="checkbox"
+                className="form-checkbox appearance-none checked:bg-blue-600 checked:border-transparent"
+              ></input>
+              Centro
+            </label>
+
+            <label className="flex h-10 rounded-md shadow-md items-center px-2 gap-3 text-sm">
+              <input
+                type="checkbox"
+                className="form-checkbox appearance-none checked:bg-blue-600 checked:border-transparent"
+              ></input>
+              Urbano
+            </label>
+            <label className="flex h-10 rounded-md shadow-md items-center px-2 gap-3 text-sm">
+              <input
+                type="checkbox"
+                className="form-checkbox appearance-none checked:bg-blue-600 checked:border-transparent"
+              ></input>
+              Vía a la Costa
+            </label>
             <Link href={`./navegation/${route.query.id}`}>
-              <a className="mt-8 text-md font-medium text-right text-blue-600">
+              <span
+                onClick={() => setNumberForm(5)}
+                className="mt-8 text-md font-medium text-right text-blue-600"
+              >
                 Aceptar
-              </a>
+              </span>
             </Link>
           </>
         )}

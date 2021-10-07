@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "tailwindcss/tailwind.css";
 import Registrar from "../components/register";
+import { dataUsers } from "./api/dataUsers";
 
 export default function Welcome() {
   const route = useRouter();
-  function onSubmit() {
-    console.log("error");
-  }
+  const [match, setMatch] = useState<boolean | "ok">(true);
   const {
     register: registerUsuario,
     handleSubmit: handleSubmitUsuario,
@@ -18,6 +17,26 @@ export default function Welcome() {
     setValue: setValueUsuario,
     control: controlUsuario,
   } = useForm<Usuario>();
+
+  function onSubmit(user: Usuario) {
+    dataUsers.forEach((u, i) => {
+      if (u.cedula === user.cedula && u.password === user.password) {
+        route.push(
+          `/platform/navegation/${u.cedula}:${u.nombre}:${u.apellido}`
+        );
+        console.log("match");
+        setMatch("ok");
+
+        //setMatch(true);
+      } else {
+        if (match != "ok") {
+          setMatch(false);
+        } else {
+          setMatch(true);
+        }
+      }
+    });
+  }
 
   return (
     <div className="flex flex-col h-auto gap-y-10 items-center mt-32">
@@ -28,6 +47,11 @@ export default function Welcome() {
         <span className="text-2xl text-center font-extrabold mb-6 md:mb-10">
           Acceder
         </span>
+        {match === false && (
+          <a className="text-xs text-red-600 ">
+            Cédula o contraseña incorrecta
+          </a>
+        )}
         <input
           type="text"
           {...registerUsuario("cedula", { required: true })}

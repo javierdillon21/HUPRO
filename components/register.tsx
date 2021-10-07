@@ -1,13 +1,15 @@
-import React, { FormEventHandler } from "react";
+import React, { FormEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
 import "tailwindcss/tailwind.css";
 import { Router, useRouter } from "next/router";
 import Header from "./header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { dataUsers } from "../pages/api/dataUsers";
 
 export default function Registrar() {
   const route = useRouter();
+  const [match, setMatch] = useState<boolean | "ok">(false);
   const {
     register: registerUsuario,
     handleSubmit: handleSubmitUsuario,
@@ -18,7 +20,19 @@ export default function Registrar() {
   } = useForm<Usuario>();
 
   function Submit(user: Usuario) {
-    route.push(`/platform/${user.cedula}:${user.nombre}:${user.apellido}`);
+    dataUsers.forEach((u, i) => {
+      if (u.cedula == user.cedula) {
+        setMatch(true);
+        console.log("ya existe");
+      } else {
+        if (match === true) {
+        } else {
+          setMatch("ok");
+        }
+      }
+    });
+    if (match === "ok")
+      route.push(`/platform/${user.cedula}:${user.nombre}:${user.apellido}`);
   }
 
   return (
@@ -30,6 +44,11 @@ export default function Registrar() {
           className="flex flex-col xs:w-11/12 md:w-2/3 gap-y-2 m-0"
         >
           <span className="text-3xl font-extrabold mb-4">Datos Personales</span>
+          {match === true && (
+            <a className="text-xs text-red-600 ">
+              Esta cédula pertenece a un usuario ya existente
+            </a>
+          )}
           <input
             type="text"
             {...registerUsuario("cedula", { required: true })}
