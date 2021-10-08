@@ -11,7 +11,14 @@ export default function Home() {
   const [miniaturas, setMiniaturas] = useState<Miniatura[]>();
   const [filtro, setFiltro] = useState<Miniatura[]>();
   const [filtrar, setFiltrar] = useState(false);
-  const categorias = ["General", "Dormitorio", "Sala", "Comedor", "Fachada"];
+  const optionsUbicacion = [
+    "Norte",
+    "Sur",
+    "Centro",
+    "Samborondón",
+    "Vía a la Costa",
+  ];
+
   const info = useRouter().query.pid as string;
   console.log(info);
 
@@ -60,45 +67,58 @@ export default function Home() {
             <>
               <div
                 id="Barra de categorias"
-                className="flex flex-wrap px-8 py-0.5 justify-around bg-gray-100 bg-opacity-70 w-90p gap-x-8 text-sm"
+                className="flex flex-wrap items-center justify-center border-b py-1"
               >
-                <button
-                  className="p-0.5 focus:font-bold focus:border-b focus:border-gray-500 focus:outline-none"
-                  onClick={() => setFiltro(miniaturas)}
-                  autoFocus
-                >
-                  Todos
-                </button>
-                {categorias.map((categoria) => {
-                  return (
+                <div className="flex flex-col w-screen items-center justify-center">
+                  <a className="flex text-xs text-start self-start px-1 font-normal text-gray-600">
+                    Sector
+                  </a>
+                  <span className="flex flex-wrap gap-1 px-1 items-center justify-start">
                     <button
-                      key={`id-${categoria}`}
-                      className="p-0.5 focus:font-bold focus:border-b focus:border-gray-500 focus:outline-none"
-                      onClick={() =>
-                        setFiltro(
-                          miniaturas?.filter(
-                            (miniatura) => miniatura.categoria == categoria
-                          )
-                        )
-                      }
+                      className="text-gray-600 bg-transparent border rounded-md border-gray-600 hover:bg-gray-600 hover:text-white active:bg-gray-600 font-bold uppercase text-xs px-2 py-1 outline-none focus:outline-none ease-linear transition-all duration-150"
+                      onClick={() => setFiltro(miniaturas)}
+                      autoFocus
                     >
-                      {categoria}
+                      Todos
                     </button>
-                  );
-                })}
+                    {optionsUbicacion.map((op, i) => {
+                      return (
+                        <button
+                          key={`op-${i}`}
+                          className="text-gray-600 bg-transparent border rounded-md border-gray-600 hover:bg-gray-600 hover:text-white active:bg-gray-600 font-bold uppercase text-xs px-2 py-1 outline-none focus:outline-none ease-linear transition-all duration-150"
+                          onClick={() =>
+                            setFiltro(
+                              miniaturas?.filter(
+                                (miniatura) => miniatura.localidad === op
+                              )
+                            )
+                          }
+                        >
+                          {op}
+                        </button>
+                      );
+                    })}
+                  </span>
+                </div>
               </div>
             </>
           )}
 
           <div className="flex flex-row w-full justify-between items-center px-2 py-1 mb-2 shadow-md">
-            <span className="flex gap-2 items-center text-sm">
-              Ordenar por
-              <FontAwesomeIcon
-                icon="sort-down"
-                size="1x"
-                className="fill-current text-gray-700"
-              />
-            </span>
+            <button
+              onClick={() =>
+                setFiltro(
+                  miniaturas?.filter(
+                    (miniatura) =>
+                      miniatura.localidad === "Urbanización La Costa"
+                  )
+                )
+              }
+              className="flex gap-2 items-center justify-center text-white bg-transparent border border-blue-500 rounded-md hover:border-pink-500 bg-gradient-to-r from-green-400 to-blue-500 focus:from-pink-500 focus:to-yellow-500 font-bold uppercase text-xs px-2 py-1 outline-none focus:outline-none ease-linear transition-all duration-150"
+            >
+              NUEVOS PROYECTOS
+              <FontAwesomeIcon icon="star" size="1x" className="fill-current" />
+            </button>
             <div className="flex gap-2 items-center self-end ">
               {filtrar && (
                 <FontAwesomeIcon
@@ -120,7 +140,7 @@ export default function Home() {
             {filtro?.map((p) => {
               return (
                 <div key={`pid-${p.nombre}`} className="flex justify-center">
-                  <div className="grid font-title text-sm gap-y-2 text-third shadow-md w-98">
+                  <div className="animate-fade-in-down grid font-title text-sm gap-y-2 text-third shadow-md w-98">
                     <Link href={`./proyecto/${info}:${p.portada.idProyecto}`}>
                       <a className="flex w-full h-44">
                         <Image

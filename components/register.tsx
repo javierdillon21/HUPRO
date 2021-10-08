@@ -9,6 +9,7 @@ import { dataUsers } from "../pages/api/dataUsers";
 
 export default function Registrar() {
   const route = useRouter();
+  const cedulas = dataUsers.map((u) => u.cedula);
   const [match, setMatch] = useState<boolean | "ok">(false);
   const {
     register: registerUsuario,
@@ -20,19 +21,10 @@ export default function Registrar() {
   } = useForm<Usuario>();
 
   function Submit(user: Usuario) {
-    dataUsers.forEach((u, i) => {
-      if (u.cedula == user.cedula) {
-        setMatch(true);
-        console.log("ya existe");
-      } else {
-        if (match === true) {
-        } else {
-          setMatch("ok");
-        }
-      }
-    });
-    if (match === "ok")
+    if (!cedulas.includes(user.cedula)) {
+      setMatch(false);
       route.push(`/platform/${user.cedula}:${user.nombre}:${user.apellido}`);
+    } else setMatch(true);
   }
 
   return (
@@ -41,7 +33,7 @@ export default function Registrar() {
       <div className="flex flex-col gap-y-10 items-center mt-16">
         <form
           onSubmit={handleSubmitUsuario(Submit)}
-          className="flex flex-col xs:w-11/12 md:w-2/3 gap-y-2 m-0"
+          className="animate-fade-in-down flex flex-col xs:w-11/12 md:w-2/3 gap-y-2 m-0"
         >
           <span className="text-3xl font-extrabold mb-4">Datos Personales</span>
           {match === true && (
@@ -103,7 +95,7 @@ export default function Registrar() {
           </button>
         </form>
 
-        <div className="flex flex-col text-sm md:text-lg w-screen h-12 px-5 gap-x-6 items-center">
+        <div className="animate-fade-in-up flex flex-col text-sm md:text-lg w-screen h-12 px-5 gap-x-6 items-center">
           ¿Ya tienes una cuenta?
           <Link href="/">
             <a className="text-blue-800"> Ingresa con tu cuenta</a>

@@ -11,6 +11,7 @@ export default function Inmueble() {
   const route = useRouter().query.proy as string;
   const [idUser, userName, userLastname, idProyecto] = route.split(":");
   const [miniatura, setMiniatura] = useState<Miniatura>();
+  const [cotizar, setCotizar] = useState<boolean>();
   function FormatearTexto(arr: Array<Texto>) {
     const strArr = arr.map((obj) => obj.text);
     return strArr.join("\n");
@@ -67,7 +68,7 @@ export default function Inmueble() {
       />
 
       <div key={`pid-${miniatura.nombre}`} className="flex justify-center">
-        <div className="grid font-title text-sm gap-y-2 text-third w-98">
+        <div className="animate-fade-in-down grid font-title text-sm gap-y-2 text-third w-98">
           <a className="flex w-full h-44">
             <Image
               className="object-cover object-top transition duration-500 ease-in-out transform hover:scale-110"
@@ -121,7 +122,7 @@ export default function Inmueble() {
         </div>
       </div>
       {/* //DETALLES DE LA PROPIEDAD */}
-      <div className="flex flex-col items-center mt-1 gap-3">
+      <div className="animate-fade-in-up flex flex-col items-center mt-1 gap-3">
         <span className="flex h-8 w-4/5 gap-1 border-gray-400 border text-gray-600 font-normal text-xs text-center items-center justify-center">
           <FontAwesomeIcon
             icon="info-circle"
@@ -155,6 +156,32 @@ export default function Inmueble() {
             </a>
           </span>
         </span>
+
+        {cotizar && (
+          <span className="animate-fade-in-down fad flex h-10 w-4/5 gap-1 px-2 border-green-600 border text-green-800 font-normal text-xs text-center items-center justify-center">
+            <FontAwesomeIcon
+              icon="check-circle"
+              size="lg"
+              className="fill-current text-green-700"
+            />
+            Sus datos han sido enviados. Un agente le contactará en la brevedad
+            posible.
+          </span>
+        )}
+        <button
+          onClick={() => {
+            setCotizar(true);
+            setTimeout(() => setCotizar(false), 5000);
+          }}
+          className="flex h-8 w-4/5 gap-2 border-blue-500 border bg-blue-600 text-white text-xs font-bold text-center items-center justify-center"
+        >
+          <FontAwesomeIcon
+            icon="file-invoice-dollar"
+            size="lg"
+            className="fill-current"
+          />
+          COTIZAR
+        </button>
 
         <span className="flex flex-col w-full px-2 gap-2 items-start border-b ">
           <a className="font-medium text-lg text-gray-800">Galería</a>
