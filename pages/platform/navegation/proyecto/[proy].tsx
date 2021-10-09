@@ -8,8 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Inmueble() {
-  const route = useRouter().query.proy as string;
-  const [idUser, userName, userLastname, idProyecto] = route.split(":");
+  const route = String(useRouter().query.proy);
+  const [idUser, userName, userLastname, idProyecto] = route?.split(":");
   const [miniatura, setMiniatura] = useState<Miniatura>();
   const [cotizar, setCotizar] = useState<boolean>();
   function FormatearTexto(arr: Array<Texto>) {
