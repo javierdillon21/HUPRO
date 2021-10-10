@@ -6,6 +6,7 @@ import "tailwindcss/tailwind.css";
 import { proxy, subscribe, useSnapshot } from "valtio";
 import Registrar from "../components/register";
 import { dataUsers } from "./api/dataUsers";
+import Image from "next/image";
 
 export const info = proxy({ cedula: "", nombre: "", apellido: "", idProy: "" });
 subscribe(info, () => {
@@ -44,6 +45,9 @@ export default function Welcome() {
 
   return (
     <div className="flex flex-col h-auto gap-y-10 items-center mt-32">
+      <div className="animate-fade-in-down">
+        <Image src={"/icons/HUPRO LOGO.png"} width={172} height={50} />
+      </div>
       <form
         onSubmit={handleSubmitUsuario(onSubmit)}
         className="animate-fade-in-down flex flex-col xs:w-11/12 md:w-2/3 gap-y-2 m-0"
