@@ -6,10 +6,12 @@ import Header from "./header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { dataUsers } from "../pages/api/dataUsers";
+import { info } from "../pages";
 
 export default function Registrar() {
   const route = useRouter();
   const cedulas = dataUsers.map((u) => u.cedula);
+
   const [match, setMatch] = useState<boolean | "ok">(false);
   const {
     register: registerUsuario,
@@ -22,8 +24,11 @@ export default function Registrar() {
 
   function Submit(user: Usuario) {
     if (!cedulas.includes(user.cedula)) {
+      info.cedula = user.cedula;
+      info.nombre = user.nombre;
+      info.apellido = user.apellido;
       setMatch(false);
-      route.push(`/platform/${user.cedula}:${user.nombre}:${user.apellido}`);
+      route.push(`/test`);
     } else setMatch(true);
   }
 

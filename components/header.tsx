@@ -3,13 +3,16 @@ import { useState } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Router, useRouter } from "next/router";
+import { useSnapshot } from "valtio";
+import { info } from "../pages";
 
 export default function Header(props: {
   canUback: boolean;
   routeBack?: string;
   tabTitle?: string;
-  userName?: string;
 }) {
+  const snap = useSnapshot(info);
+
   return (
     <div className="flex w-screen h-14 px-4 gap-x-6 items-center justify-between border-b">
       <span className="flex gap-x-6 items-center">
@@ -26,7 +29,9 @@ export default function Header(props: {
         )}
         {props.tabTitle === "De tu interés" && (
           <span className="flex h-10 w-10 rounded-full bg-blue-500 items-center justify-center text-white text-xl font-medium">
-            {props.userName?.toUpperCase()}
+            {`${snap.nombre[0] || localStorage.getItem("nombre")?.[0]}${
+              snap.apellido[0] || localStorage.getItem("apellido")?.[0]
+            }`.toUpperCase()}
           </span>
           // <span className="flex h-10 w-10 rounded-full bg-gradient-to-tr from-purple-400 via-pink-500 to-red-500"></span>
         )}

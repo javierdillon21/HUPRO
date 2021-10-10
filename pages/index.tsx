@@ -3,14 +3,22 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "tailwindcss/tailwind.css";
+import { proxy, subscribe, useSnapshot } from "valtio";
 import Registrar from "../components/register";
 import { dataUsers } from "./api/dataUsers";
 
+export const info = proxy({ cedula: "", nombre: "", apellido: "", idProy: "" });
+subscribe(info, () => {
+  info.nombre && localStorage.setItem("nombre", info.nombre);
+  info.apellido && localStorage.setItem("apellido", info.apellido);
+});
+
 export default function Welcome() {
   const route = useRouter();
+
   const cedulaPassword = dataUsers.map((u) => [u.cedula, u.password]);
   console.log(cedulaPassword);
-
+  const snap = useSnapshot(info);
   const [match, setMatch] = useState<boolean>(true);
   const {
     register: registerUsuario,
@@ -26,8 +34,11 @@ export default function Welcome() {
       (i) => i.cedula == user.cedula && i.password == user.password
     );
     if (u) {
+      info.cedula = u.cedula;
+      info.nombre = u.nombre;
+      info.apellido = u.apellido;
       setMatch(true);
-      route.push(`/platform/navegation/${u.cedula}:${u.nombre}:${u.apellido}`);
+      route.push(`/home`);
     } else setMatch(false);
   }
 

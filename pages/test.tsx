@@ -3,12 +3,13 @@ import { route } from "next/dist/server/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import Header from "../../components/header";
+import { useSnapshot } from "valtio";
+import { info } from ".";
+import Header from "../components/header";
 
 export default function Test() {
   const route = useRouter();
   console.log(route);
-
   const [numberForm, setNumberForm] = useState<1 | 2 | 3 | 4 | 5>(1);
   return (
     <div className="flex flex-col h-screen items-center justify-center">
@@ -251,7 +252,7 @@ export default function Test() {
               ></input>
               Vía a la Costa
             </label>
-            <Link href={`./navegation/${route.query.id}`}>
+            <Link href={`/home`}>
               <span
                 onClick={() => setNumberForm(5)}
                 className="mt-8 text-md font-medium text-right text-blue-600"
@@ -261,7 +262,7 @@ export default function Test() {
             </Link>
           </>
         )}
-        <Link href={`./navegation/${route.query.id}`}>
+        <Link href={`/home`}>
           <a className="mt-10 text-md font-medium text-left text-red-600">
             Omitir test
           </a>

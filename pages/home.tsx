@@ -1,26 +1,27 @@
 import { Router, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Header from "../../../components/header";
+import Header from "../components/header";
 import Prismic from "@prismicio/client";
-import cliente from "../../../src/prismic/prismic-configuration";
+import cliente from "../src/prismic/prismic-configuration";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSnapshot } from "valtio";
+import { info } from ".";
 
 export default function Home() {
   const [miniaturas, setMiniaturas] = useState<Miniatura[]>();
   const [filtro, setFiltro] = useState<Miniatura[]>();
   const [filtrar, setFiltrar] = useState(false);
+
   const optionsUbicacion = [
     "Norte",
     "Sur",
     "Centro",
     "Samborondón",
-    "Vía a la Costa",
+    "Via a la Costa",
   ];
-
-  const info = useRouter().query.pid as string;
-  console.log(info);
+  const snap = useSnapshot(info);
 
   useEffect(() => {
     cliente()
@@ -57,17 +58,13 @@ export default function Home() {
   return (
     info && (
       <>
-        <Header
-          canUback={false}
-          tabTitle="De tu interés"
-          userName={`${info.split(":")[1][0]}${info.split(":")[2][0]}`}
-        />
+        <Header canUback={false} tabTitle="De tu interés" />
         <div className="flex flex-col w-screen items-center justify-center ">
           {filtrar && (
             <>
               <div
                 id="Barra de categorias"
-                className="flex flex-wrap items-center justify-center border-b py-1"
+                className="flex animate-fade-in-down flex-wrap items-center justify-center border-b py-1"
               >
                 <div className="flex flex-col w-screen items-center justify-center">
                   <a className="flex text-xs text-start self-start px-1 font-normal text-gray-600">
@@ -141,10 +138,15 @@ export default function Home() {
               return (
                 <div key={`pid-${p.nombre}`} className="flex justify-center">
                   <div className="animate-fade-in-down grid font-title text-sm gap-y-2 text-third shadow-md w-98">
-                    <Link href={`./proyecto/${info}:${p.portada.idProyecto}`}>
-                      <a className="flex w-full h-44">
+                    <Link href={`/${p.portada.idProyecto}`}>
+                      <a
+                        className="flex w-full h-44"
+                        onClick={() => {
+                          info.idProy = p.portada.idProyecto || "-1";
+                        }}
+                      >
                         <Image
-                          className="object-cover object-top transition duration-500 ease-in-out transform hover:scale-110"
+                          className="object-cover object-center transition duration-500 ease-in-out transform hover:scale-110"
                           src={p.portada.url}
                           width={p.portada.dimensions.width}
                           height={p.portada.dimensions.height}

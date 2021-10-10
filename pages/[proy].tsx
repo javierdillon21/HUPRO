@@ -1,77 +1,88 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Header from "../../../../components/header";
-import cliente from "../../../../src/prismic/prismic-configuration";
+import cliente from "../src/prismic/prismic-configuration";
 import Prismic from "@prismicio/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "../components/header";
+import { snapshot, useSnapshot } from "valtio";
+import { info } from ".";
+import SpinnerLoading from "../components/spinnerLoading";
 
 export default function Inmueble() {
-  const route = String(useRouter().query.proy);
-  const [idUser, userName, userLastname, idProyecto] = route?.split(":");
+  const route = useRouter().query.proy;
+  const snap = useSnapshot(info);
   const [miniatura, setMiniatura] = useState<Miniatura>();
   const [cotizar, setCotizar] = useState<boolean>();
   function FormatearTexto(arr: Array<Texto>) {
     const strArr = arr.map((obj) => obj.text);
     return strArr.join("\n");
   }
+
   useEffect(() => {
-    cliente()
-      .query(Prismic.Predicates.at("document.id", idProyecto))
-      .then(function (response: { results: ResultsPrismic }) {
-        const document = response.results[0];
-        console.log("EL DOC ES:", document);
+    if (route) {
+      console.log("RUTA ES:", route);
+      cliente()
+        .query(Prismic.Predicates.at("document.id", route))
+        .then(function (response: { results: ResultsPrismic }) {
+          const document = response.results[0];
+          console.log("EL DOC ES:", document);
+          if (!document) return undefined;
+          var imgPortada: Imagen = {
+            idProyecto: document.id,
+            dimensions: {
+              width: document.data.imagenes[0].imagen.dimensions.width,
+              height: document.data.imagenes[0].imagen.dimensions.height,
+            },
+            url: document.data.imagenes[0].imagen.url,
+          };
 
-        var imgPortada: Imagen = {
-          idProyecto: document.id,
-          dimensions: {
-            width: document.data.imagenes[0].imagen.dimensions.width,
-            height: document.data.imagenes[0].imagen.dimensions.height,
-          },
-          url: document.data.imagenes[0].imagen.url,
-        };
+          var miniatura: Miniatura = {
+            nombre: document.data.nombre[0].text,
+            portada: imgPortada,
+            categoria: document.data.categoria,
+            localidad: document.data.localidad,
+            precio: document.data.precio[0].text,
+            banos: Number(document.data.banos),
+            dormitorios: Number(document.data.dormitorios),
+            area: document.data.area[0].text,
+            descripcion: FormatearTexto(document.data.descripcion),
+            precio_por_metro: document.data.precio_por_metro[0].text,
+            multimedia: document.data.imagenes.map((i) => {
+              const imgObj: Imagen = {
+                idProyecto: document.id,
+                dimensions: {
+                  width: i.imagen.dimensions.width,
+                  height: i.imagen.dimensions.height,
+                },
+                url: i.imagen.url,
+              };
+              return imgObj;
+            }),
+          };
 
-        var miniatura: Miniatura = {
-          nombre: document.data.nombre[0].text,
-          portada: imgPortada,
-          categoria: document.data.categoria,
-          localidad: document.data.localidad,
-          precio: document.data.precio[0].text,
-          banos: Number(document.data.banos),
-          dormitorios: Number(document.data.dormitorios),
-          area: document.data.area[0].text,
-          descripcion: FormatearTexto(document.data.descripcion),
-          precio_por_metro: document.data.precio_por_metro[0].text,
-          multimedia: document.data.imagenes.map((i) => {
-            const imgObj: Imagen = {
-              idProyecto: document.id,
-              dimensions: {
-                width: i.imagen.dimensions.width,
-                height: i.imagen.dimensions.height,
-              },
-              url: i.imagen.url,
-            };
-            return imgObj;
-          }),
-        };
+          setMiniatura(miniatura);
+        });
+    }
+  }, [route]);
 
-        setMiniatura(miniatura);
-      });
-  }, []);
-  if (!miniatura) return <></>;
+  if (!route || !miniatura)
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <SpinnerLoading />
+      </div>
+    );
+
   return (
     <div>
-      <Header
-        canUback={true}
-        routeBack={`../${idUser}:${userName}:${userLastname}`}
-      />
+      <Header canUback={true} routeBack={`/home`} />
 
       <div key={`pid-${miniatura.nombre}`} className="flex justify-center">
         <div className="animate-fade-in-down grid font-title text-sm gap-y-2 text-third w-98">
           <a className="flex w-full h-44">
             <Image
-              className="object-cover object-top transition duration-500 ease-in-out transform hover:scale-110"
+              className="object-cover object-center transition duration-500 ease-in-out transform hover:scale-110"
               src={miniatura.portada.url}
               width={miniatura.portada.dimensions.width}
               height={miniatura.portada.dimensions.height}
@@ -87,11 +98,22 @@ export default function Inmueble() {
             </span>
 
             <span className="flex flex-col items-end">
-              <FontAwesomeIcon
-                icon="bookmark"
-                size="lg"
-                className="fill-current text-gray-300"
-              />
+              {miniatura.localidad == "Urbanización La Costa" && (
+                <span className="flex gap-2 items-center">
+                  <Link href="https://es.calameo.com/read/0068283845b01e83b8828">
+                    <button className="flex gap-1 p-1 border-gray-400 border text-gray-600 font-normal text-xs text-center items-center justify-center">
+                      <a className="text-xs font-medium text-gray-600">
+                        Visita el sitio
+                      </a>
+                      <FontAwesomeIcon
+                        icon="external-link-alt"
+                        size="lg"
+                        className="fill-current text-gray-600"
+                      />
+                    </button>
+                  </Link>
+                </span>
+              )}
               <span className="grid grid-cols-3  pt-3 font-semibold text-gray-700">
                 <span className="flex flex-col items-center border-r border-gray-500">
                   {miniatura.dormitorios}
