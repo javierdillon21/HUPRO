@@ -70,9 +70,7 @@ export default function Welcome() {
             {letras1 == true && (
               <span className="flex animate-fade-in-down gap-1">
                 <a>Si buscas un</a>
-                {letras2 == true && (
-                  <a className="animate-fade-in-down text-casa-logo">BIEN</a>
-                )}
+                <a className="animate-fade-in-down text-casa-logo">BIEN</a>
               </span>
             )}
             {letras3 == true && (
