@@ -21,11 +21,11 @@ export default function Welcome() {
   const [letras2, setLetras2] = useState<boolean>(false);
   const [letras3, setLetras3] = useState<boolean>(false);
   const [letras4, setLetras4] = useState<boolean>(false);
-  setTimeout(() => setIntro(2), 6000);
+  setTimeout(() => setIntro(2), 5000);
   setTimeout(() => setLetras1(true), 1000);
-  setTimeout(() => setLetras2(true), 2000);
-  setTimeout(() => setLetras3(true), 3000);
-  setTimeout(() => setLetras4(true), 4000);
+  setTimeout(() => setLetras2(true), 1500);
+  setTimeout(() => setLetras3(true), 2000);
+  setTimeout(() => setLetras4(true), 2500);
   const cedulaPassword = dataUsers.map((u) => [u.cedula, u.password]);
   console.log(cedulaPassword);
   const snap = useSnapshot(info);
