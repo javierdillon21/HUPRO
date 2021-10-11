@@ -17,7 +17,15 @@ subscribe(info, () => {
 export default function Welcome() {
   const route = useRouter();
   const [intro, setIntro] = useState<1 | 2>(1);
-  setTimeout(() => setIntro(2), 5000);
+  const [letras1, setLetras1] = useState<boolean>(false);
+  const [letras2, setLetras2] = useState<boolean>(false);
+  const [letras3, setLetras3] = useState<boolean>(false);
+  const [letras4, setLetras4] = useState<boolean>(false);
+  setTimeout(() => setIntro(2), 6000);
+  setTimeout(() => setLetras1(true), 1000);
+  setTimeout(() => setLetras2(true), 2000);
+  setTimeout(() => setLetras3(true), 3000);
+  setTimeout(() => setLetras4(true), 4000);
   const cedulaPassword = dataUsers.map((u) => [u.cedula, u.password]);
   console.log(cedulaPassword);
   const snap = useSnapshot(info);
@@ -54,20 +62,29 @@ export default function Welcome() {
       />
 
       {intro == 1 && (
-        <div className="flex flex-col absolute justify-center gap-5 items-center h-screen w-screen bg-black bg-opacity-50">
-          <Image
-            src={"/icons/HUPRO LOGO.png"}
-            width={172}
-            height={50}
-            className="animate-fade-in-down"
-          />
-          <span className="animate animate-fade-in-up flex flex-col w-4/5 leading-5 text-2xl text-center font-medium text-gray-100">
-            <span>
-              Si buscas un <a className="text-yellow-300">BIEN</a>
-            </span>
-            <span>
-              Te encontramos tu <a className="text-yellow-300">BIEN-ESTAR</a>
-            </span>
+        <div className="flex flex-col absolute gap-5 items-center justify-center h-screen w-screen bg-black bg-opacity-50">
+          <span className="flex absolute h-1/2 w-full justify-center items-end py-10 inset-x-0 top-0 animate-fade-in-down">
+            <Image src={"/icons/HUPRO LOGO W.png"} width={193} height={56} />
+          </span>
+          <span className="absolute inset-x-0 bottom-0 flex flex-col w-full leading-5 h-1/2 text-2xl text-center items-center self-center justify-start font-medium text-gray-100">
+            {letras1 == true && (
+              <span className="flex animate-fade-in-down gap-1">
+                <a>Si buscas un</a>
+                {letras2 == true && (
+                  <a className="animate-fade-in-down text-casa-logo">BIEN</a>
+                )}
+              </span>
+            )}
+            {letras3 == true && (
+              <span className=" flex flex-col animate-fade-in-down gap-1">
+                <a>Te encontramos tu </a>
+                {letras4 == true && (
+                  <a className=" animate-fade-in-down text-casa-logo">
+                    BIEN-ESTAR
+                  </a>
+                )}
+              </span>
+            )}
           </span>
         </div>
       )}
