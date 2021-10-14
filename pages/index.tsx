@@ -98,7 +98,7 @@ export default function Welcome() {
             </span>
             {match === false && (
               <a className="text-xs text-red-600 ">
-                Cédula o contraseña incorrecta
+                Cédula o correo incorrecto
               </a>
             )}
             <input
@@ -111,9 +111,9 @@ export default function Welcome() {
               <span className="text-red-500 text-sm">Campo obligatorio</span>
             )}
             <input
-              type="password"
+              type="text"
               {...registerUsuario("password", { required: true })}
-              placeholder="Contraseña"
+              placeholder="E-mail"
               className="form-input border-0 border-b placeholder-gray-400 border-gray-400"
             />
             {errorUsuario.password && (
