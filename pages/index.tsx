@@ -129,9 +129,9 @@ export default function Welcome() {
           </form>
           <div className="animate-fade-in-up flex flex-col text-sm md:text-lg w-screen h-12 px-5 gap-x-6 text-gray-100 items-center">
             ¿Aún no tienes una cuenta?
-            {/* <Link href="/newUser">
+            <Link href="/newUser">
               <a className="text-blue-400"> Crea una nueva aquí</a>
-            </Link> */}
+            </Link>
           </div>
         </div>
       )}
